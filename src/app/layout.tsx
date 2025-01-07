@@ -10,8 +10,8 @@ import { Navbar } from "@/components/navbar/navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "VastyBoy",
-  description: "Sua fonte completa para dados de mercado em um só lugar",
+  title: "Vasty Boy",
+  description: "Crie seu robô financeiro de forma totalmente customizada",
 };
 
 export default function RootLayout({

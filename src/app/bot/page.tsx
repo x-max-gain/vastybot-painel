@@ -72,10 +72,10 @@ export default function Bot() {
           <div className="w-full grid grid-cols-4 gap-4 mb-8">
             {
               myBots?.content.length === 0 && (
-                <div className="rounded-lg cursor-pointer hover:bg-background-hoverPrimary bg-background-primary h-[248px] flex justify-center items-center flex-col">
+                <Link href="/bot/create" className="rounded-lg cursor-pointer hover:bg-background-hoverPrimary bg-background-primary h-[248px] flex justify-center items-center flex-col">
                   <Plus className="text-text-main mb-4" size={40} />
                   <p className="text-text-main">Crie seu primeiro bot</p>
-                </div>
+                </Link>
               )
             }
             {myBots?.content.map((item, index) => <div

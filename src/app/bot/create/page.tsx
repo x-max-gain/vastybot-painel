@@ -34,7 +34,7 @@ export default function CreateBotInformations() {
     }, [])
 
     return (
-        <div className="p-4 bg-background-primary rounded-md">
+        <div className="p-4 bg-background-primary rounded-lg">
             {!loading && (
                 <>
                     <Formik
