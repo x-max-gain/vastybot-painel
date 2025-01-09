@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import { useState } from 'react';
+import { useState } from "react";
 import Image from "next/image";
 import GoogleLogo from "../../../public/social/goolge-logo.png";
 
@@ -14,7 +14,7 @@ export default function SignIn() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(""); 
+    setError("");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -68,11 +68,7 @@ export default function SignIn() {
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-red-500">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             type="submit"
@@ -84,32 +80,24 @@ export default function SignIn() {
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
             Não tem uma conta?{" "}
-            <a
-              href="/signup"
-              className="text-green-500 hover:underline"
-            >
+            <a href="/signup" className="text-green-500 hover:underline">
               Cadastre-se
             </a>
           </p>
         </div>
         <div className="mt-4 flex items-center justify-center">
-  <p className="text-sm text-gray-600">
-    Entre com sua conta Google{" "}
-  </p>
+          <p className="text-sm text-gray-600">Entre com sua conta Google </p>
 
-  <a
-    href="/signup"
-    className="ml-2 flex items-center justify-center"
-  >
-    <Image
-      src={GoogleLogo}
-      alt="Google Logo"
-      width={20}
-      height={20}
-      className="rounded-full"
-    />
-  </a>
-</div>
+          <a href="/signup" className="ml-2 flex items-center justify-center">
+            <Image
+              src={GoogleLogo}
+              alt="Google Logo"
+              width={20}
+              height={20}
+              className="rounded-full"
+            />
+          </a>
+        </div>
       </div>
     </div>
   );

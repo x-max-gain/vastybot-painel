@@ -24,10 +24,14 @@ export default function Account() {
         return <Integrations />;
 
       case "Financeiro":
-        return <div className="py-4"><Finnance /></div>
+        return (
+          <div className="py-4">
+            <Finnance />
+          </div>
+        );
 
       case "Últimos Acessos":
-        return <AccessProfile />
+        return <AccessProfile />;
 
       default:
         return <p className="text-gray-500">Selecione uma aba para começar.</p>;
@@ -39,7 +43,13 @@ export default function Account() {
       {/* Navegação */}
       <nav className="bg-background-primary shadow-sm p-4 border-b border-gray-200 flex justify-center items-center">
         <div className="flex gap-4">
-          {["Perfil", "Plano", "Integrações", "Financeiro", "Últimos Acessos"].map((tab) => (
+          {[
+            "Perfil",
+            "Plano",
+            "Integrações",
+            "Financeiro",
+            "Últimos Acessos",
+          ].map((tab) => (
             <button
               key={tab}
               className={`px-2 sm:px-4 py-2 ${

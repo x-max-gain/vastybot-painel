@@ -2,8 +2,8 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react"
-import NextTopLoader from 'nextjs-toploader';
+import { Analytics } from "@vercel/analytics/react";
+import NextTopLoader from "nextjs-toploader";
 import { Sidebar } from "@/components/sidebar/sidebar";
 import { Navbar } from "@/components/navbar/navbar";
 
@@ -42,7 +42,6 @@ export default function RootLayout({
           <Sidebar />
 
           <div className="flex w-full flex-col xl:ms-[270px] xl:w-[calc(100%-270px)] 2xl:ms-72 2xl:w-[calc(100%-288px)]">
-
             <Navbar />
 
             <div className="flex flex-grow flex-col px-4 pb-6 @container md:px-5 lg:px-4 lg:pb-8 3xl:px-8 4xl:px-10 4xl:pb-9">

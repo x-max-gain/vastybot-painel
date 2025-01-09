@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       margin: {
-        'mr-50': '-50px', // Adiciona a classe m-[-50px]
+        "mr-50": "-50px", // Adiciona a classe m-[-50px]
       },
       colors: {
         background: {
@@ -22,9 +22,9 @@ const config: Config = {
           green: "#08DD7E",
           decoration: "#4182e0", // #243bed
           deep: "#f5f5f5",
-          danger: 'red',
-          success: '#08DD7E',
-          warnning: "yellow"
+          danger: "red",
+          success: "#08DD7E",
+          warnning: "yellow",
         },
         text: {
           primary: "#000",
@@ -37,21 +37,21 @@ const config: Config = {
         icons: {
           primary: "#929292",
           active: "#08DD7E",
-          background: "#27272A"
+          background: "#27272A",
         },
         border: {
           primary: "#75FFC1",
-          secondary: "#393939"
+          secondary: "#393939",
         },
         button: {
           primary: "#08DD7E",
           secondary: "#393939",
-          hover: "#049354"
+          hover: "#049354",
         },
       },
       translate: {
-        profile: '-10rem'
-      }
+        profile: "-10rem",
+      },
     },
   },
   plugins: [],

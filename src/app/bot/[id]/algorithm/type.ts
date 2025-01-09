@@ -1,8 +1,8 @@
 export type InformationsSelectedActiveType = {
-    selectedActive: {
-        coin: {
-            location: string,
-            signal: string
-        }
-    }
-}
+  selectedActive: {
+    coin: {
+      location: string;
+      signal: string;
+    };
+  };
+};

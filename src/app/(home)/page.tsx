@@ -34,7 +34,9 @@ export default function HomeDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
         <div className="bg-background-deep p-4 rounded shadow">
-          <h2 className="text-md font-bold text-gray-700">Estratégias de analistas de sucesso</h2>
+          <h2 className="text-md font-bold text-gray-700">
+            Estratégias de analistas de sucesso
+          </h2>
           <div className="mt-4 flex flex-col gap-2">
             <div className="flex items-center justify-between bg-background-primary rounded p-3 shadow">
               <div>
@@ -77,16 +79,26 @@ export default function HomeDashboard() {
 
         {/* Notícias da plataforma */}
         <div className="bg-background-deep p-4 rounded shadow">
-          <h2 className="text-md font-bold text-gray-700">Notícias da plataforma</h2>
+          <h2 className="text-md font-bold text-gray-700">
+            Notícias da plataforma
+          </h2>
           <ul className="mt-4 space-y-2">
-            <li className="flex items-center text-gray-500 font-bold shadow justify-between bg-background-primary rounded p-3 text-md hover:bg-green-500 hover:text-white">PLANOS BLACK: Até R$ 47 mil...</li>
-            <li className="flex items-center text-gray-500 font-bold shadow justify-between bg-background-primary rounded p-3 text-md hover:bg-green-500 hover:text-white">TOP ROBÔS com 30% OFF 🔥...</li>
-            <li className="flex items-center text-gray-500 font-bold shadow justify-between bg-background-primary rounded p-3 text-md hover:bg-green-500 hover:text-white">Novos Planos BLACK com DES...</li>
+            <li className="flex items-center text-gray-500 font-bold shadow justify-between bg-background-primary rounded p-3 text-md hover:bg-green-500 hover:text-white">
+              PLANOS BLACK: Até R$ 47 mil...
+            </li>
+            <li className="flex items-center text-gray-500 font-bold shadow justify-between bg-background-primary rounded p-3 text-md hover:bg-green-500 hover:text-white">
+              TOP ROBÔS com 30% OFF 🔥...
+            </li>
+            <li className="flex items-center text-gray-500 font-bold shadow justify-between bg-background-primary rounded p-3 text-md hover:bg-green-500 hover:text-white">
+              Novos Planos BLACK com DES...
+            </li>
           </ul>
         </div>
 
         <div className="bg-background-deep p-4 rounded shadow">
-          <h2 className="text-md font-bold text-gray-700">Top robôs da semana</h2>
+          <h2 className="text-md font-bold text-gray-700">
+            Top robôs da semana
+          </h2>
           <div className="mt-4 space-y-4">
             <div className="flex items-center text-green-500 hover:text-white justify-between bg-background-primary rounded p-3 hover:bg-green-500 shadow">
               <p className="font-bold">Bullbear Premium Lite</p>

@@ -23,7 +23,12 @@ export default function SignUp() {
     e.preventDefault();
 
     // Verificação de campos obrigatórios
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       setError("Todos os campos são obrigatórios.");
       return;
     }
@@ -45,7 +50,10 @@ export default function SignUp() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-white">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-white"
+            >
               Nome
             </label>
             <input
@@ -59,7 +67,10 @@ export default function SignUp() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-white">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-white"
+            >
               E-mail
             </label>
             <input
@@ -73,7 +84,10 @@ export default function SignUp() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-white">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-white"
+            >
               Senha
             </label>
             <input
@@ -87,7 +101,10 @@ export default function SignUp() {
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-white"
+            >
               Confirme sua senha
             </label>
             <input
@@ -101,11 +118,7 @@ export default function SignUp() {
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-red-500">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             type="submit"

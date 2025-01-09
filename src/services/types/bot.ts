@@ -1,3 +1,3 @@
 export type createBotInformationsType = {
-    name: string;
-}
+  name: string;
+};

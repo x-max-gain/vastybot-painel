@@ -20,5 +20,5 @@ export function Sidebar() {
         </ul>
       </div>
     </aside>
-  )
+  );
 }

@@ -33,7 +33,10 @@ export default function PasswordRecovery() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-white">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-white"
+            >
               E-mail
             </label>
             <input
@@ -47,11 +50,7 @@ export default function PasswordRecovery() {
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-red-500">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             type="submit"
@@ -74,7 +73,8 @@ export default function PasswordRecovery() {
         <div className="mt-5 top-20 w-full max-[400px]:px-4  max-w-sm p-4 bg-green-500 text-white rounded-lg shadow-lg">
           <h3 className="text-lg font-semibold">Link enviado com sucesso!</h3>
           <p className="mt-2 text-sm">
-            Um link para redefinição de senha foi enviado para <strong>{email}</strong>.
+            Um link para redefinição de senha foi enviado para{" "}
+            <strong>{email}</strong>.
           </p>
           <button
             onClick={() => setIsCardVisible(false)}
