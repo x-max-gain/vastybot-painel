@@ -5,7 +5,7 @@ import {
   createBotInformationsType,
 } from "@/services/types/bot";
 import { Formik, Form, ErrorMessage } from "formik";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { ChevronLeft, Plus } from "lucide-react";
 import Link from "next/link";
@@ -97,6 +97,25 @@ export default function CreateBotInformations() {
           type: "percentage",
           value: 0,
         });
+  };
+
+  const handleValueFloat = (
+    e: ChangeEvent<HTMLInputElement>,
+    setFieldValue: (
+      field: string,
+      value: any,
+      shouldValidate?: boolean,
+    ) => Promise<any>,
+  ) => {
+    const { name, value } = e.target;
+    const modifiedValue = value
+      .trim()
+      .replace(/[^0-9.]/g, "") // Remove tudo que não seja número ou ponto
+      .replace(/\.+/g, ".") // Substitui múltiplos pontos consecutivos por um único ponto
+      .replace(/\./g, (match, index) =>
+        index === value.indexOf(".") ? match : "",
+      ); // Mantém o primeiro ponto, remove os outros
+    setFieldValue(name, modifiedValue);
   };
 
   return (
@@ -328,7 +347,9 @@ export default function CreateBotInformations() {
                         value={values.stoploss ? values.stoploss.value : ""}
                         name="stoploss.value"
                         placeholder={`0${values.stoploss && values.stoploss.type === "percentage" ? "%" : ""}`}
-                        onChange={handleChange}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          handleValueFloat(e, setFieldValue)
+                        }
                         onBlur={handleBlur}
                         id="large-input"
                         disabled={!values.stoploss}
@@ -398,7 +419,9 @@ export default function CreateBotInformations() {
                         value={values.stopgain ? values.stopgain.value : ""}
                         name="stopgain.value"
                         placeholder={`0${values.stopgain && values.stopgain.type === "percentage" ? "%" : ""}`}
-                        onChange={handleChange}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          handleValueFloat(e, setFieldValue)
+                        }
                         onBlur={handleBlur}
                         id="large-input"
                         disabled={!values.stopgain}
