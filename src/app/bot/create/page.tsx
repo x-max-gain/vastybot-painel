@@ -14,8 +14,8 @@ import { useRouter } from "next/navigation";
 export default function CreateBotInformations() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [initialValuesInformations, setInitialValuesInformations] =
-    useState<createBotInformationsType>({
+  const [initialValues, setInitialValues] = useState<createBotInformationsType>(
+    {
       name: "",
       mode: "demo",
       close24hours: false,
@@ -24,9 +24,10 @@ export default function CreateBotInformations() {
       companyActive: "",
       stoploss: false,
       stopgain: false,
-    });
-  // ? INFORMATIONS
-  const validationSchemaInformations = Yup.object({
+    },
+  );
+  // ? VALIDATION INFORMATIONS
+  const validationSchema = Yup.object({
     name: Yup.string()
       .test(
         "no-only-spaces",
@@ -67,7 +68,7 @@ export default function CreateBotInformations() {
     }),
   });
 
-  const handleSubmitInformations = (values: createBotInformationsType) => {
+  const handleSubmit = (values: createBotInformationsType) => {
     console.log("Form Data:", values);
     // router.push("/bot/view/123/algorithm");
   };
@@ -103,9 +104,9 @@ export default function CreateBotInformations() {
       {!loading && (
         <>
           <Formik
-            initialValues={initialValuesInformations}
-            validationSchema={validationSchemaInformations}
-            onSubmit={handleSubmitInformations}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
           >
             {({
               isSubmitting,
