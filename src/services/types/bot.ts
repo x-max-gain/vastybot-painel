@@ -9,6 +9,7 @@ export type createBotInformationsType = {
   name: string;
   mode: "demo" | "real";
   close24hours: boolean;
+  operationSimultaneous: number;
   typeActive: string;
   active: string;
   companyActive: string;

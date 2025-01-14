@@ -19,6 +19,7 @@ export default function CreateBotInformations() {
       name: "",
       mode: "demo",
       close24hours: false,
+      operationSimultaneous: 1,
       typeActive: "",
       active: "",
       companyActive: "",
@@ -45,6 +46,10 @@ export default function CreateBotInformations() {
       "Modo deve ser do tipo simulado ou real",
     ),
     close24hours: Yup.boolean().required("Fechar em 24 é obrigatório"),
+    operationSimultaneous: Yup.number()
+      .required("Quantidade de máxima de operações simultâneas é obrigatório")
+      .positive("Esse campo deve ser um número positivo")
+      .min(1, "O número deve ser maior do 0"),
     typeActive: Yup.string().required("Tipo do ativo é obrigatório"),
     active: Yup.string().required("Ativo é obrigatório"),
     companyActive: Yup.string().required("Correto do ativo é obrigatório"),
@@ -53,8 +58,8 @@ export default function CreateBotInformations() {
         return Yup.boolean().oneOf([false]); // Valida que o valor é exatamente `false`
       }
       return Yup.object().shape({
-        type: Yup.string().required("Campo tipo é obrigatório"),
-        value: Yup.number().required("Campo valor é obrigatório"),
+        type: Yup.string().required("Tipo é obrigatório"),
+        value: Yup.number().required("Valor é obrigatório"),
       });
     }),
     stopgain: Yup.lazy((value: createBotInformationsStopType) => {
@@ -62,8 +67,8 @@ export default function CreateBotInformations() {
         return Yup.boolean().oneOf([false]); // Valida que o valor é exatamente `false`
       }
       return Yup.object().shape({
-        type: Yup.string().required("Campo tipo é obrigatório"),
-        value: Yup.number().required("Campo valor é obrigatório"),
+        type: Yup.string().required("Tipo é obrigatório"),
+        value: Yup.number().required("Valor é obrigatório"),
       });
     }),
   });
@@ -118,6 +123,22 @@ export default function CreateBotInformations() {
     setFieldValue(name, modifiedValue);
   };
 
+  const handleValueInteger = (
+    e: ChangeEvent<HTMLInputElement>,
+    setFieldValue: (
+      field: string,
+      value: any,
+      shouldValidate?: boolean,
+    ) => Promise<any>,
+  ) => {
+    const { name, value } = e.target;
+    const modifiedValue = value
+      .trim()
+      .replace(/[^0-9]/g, "") // Remove tudo que não seja número
+      .replace(/^0/, ""); // Remove o 0 se ele for o primeiro caractere
+    setFieldValue(name, modifiedValue);
+  };
+
   return (
     <div className="p-4 bg-background-primary rounded-lg">
       {!loading && (
@@ -144,8 +165,8 @@ export default function CreateBotInformations() {
                   </Link>{" "}
                   Criar informações do robô
                 </h1>
-                <div className="grid gap-6 mb-6 md:grid-cols-12">
-                  <div className="col-span-6">
+                <div className="grid gap-6 mb-6 grid-cols-12">
+                  <div className="col-span-12 lg:col-span-9 xl:col-span-6">
                     <label
                       htmlFor="large-input"
                       className="block mb-2 text-sm font-medium text-text-primary"
@@ -168,12 +189,12 @@ export default function CreateBotInformations() {
                       className="text-text-danger text-sm p-1"
                     />
                   </div>
-                  <div className="col-span-6">
+                  <div className="col-span-12 md:col-span-6 lg:col-span-3">
                     <p className="block mb-2 text-sm font-medium text-text-primary">
                       Modo de operação
                     </p>
-                    <div className="grid grid-cols-6">
-                      <div className="col-span-3 grid grid-cols-12">
+                    <div className="grid grid-cols-12">
+                      <div className="col-span-12 grid grid-cols-12">
                         <div
                           onClick={() => setFieldValue("mode", "demo")}
                           className={`tracking-widest col-span-6 w-full flex justify-center py-2 rounded-l-lg font-bold ${values.mode === "demo" ? "cursor-default bg-background-main text-text-ligth" : "cursor-pointer border border-gray-300 text-text-primary"}`}
@@ -194,12 +215,12 @@ export default function CreateBotInformations() {
                       className="text-text-danger text-sm p-1"
                     />
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-3">
                     <p className="block mb-2 text-sm font-medium text-text-primary">
                       Fechar operação após 24 horas
                     </p>
                     <div className="grid grid-cols-6">
-                      <div className="col-span-3 grid grid-cols-12">
+                      <div className="col-span-12 grid grid-cols-12">
                         <div
                           onClick={() => setFieldValue("close24hours", true)}
                           className={`tracking-widest col-span-6 w-full flex justify-center py-2 rounded-l-lg font-bold ${values.close24hours ? "cursor-default bg-background-main text-text-ligth" : "cursor-pointer border border-gray-300 text-text-primary"}`}
@@ -220,7 +241,30 @@ export default function CreateBotInformations() {
                       className="text-text-danger text-sm p-1"
                     />
                   </div>
-                  <div className="mb-6 col-span-3">
+                  <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-3">
+                    <p className="block mb-2 text-sm font-medium text-text-primary">
+                      Limite de operações simultâneas
+                    </p>
+                    <input
+                      type="text"
+                      value={values.operationSimultaneous}
+                      name="operationSimultaneous"
+                      placeholder={`0`}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleValueInteger(e, setFieldValue)
+                      }
+                      onBlur={handleBlur}
+                      id="large-input"
+                      inputMode="numeric"
+                      className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
+                    />
+                    <ErrorMessage
+                      name="operationSimultaneous"
+                      component="div"
+                      className="text-text-danger text-sm p-1"
+                    />
+                  </div>
+                  <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-3">
                     <label
                       htmlFor="large-input"
                       className="block mb-2 text-sm font-medium text-text-primary"
@@ -243,7 +287,7 @@ export default function CreateBotInformations() {
                       className="text-text-danger text-sm p-1"
                     />
                   </div>
-                  <div className="mb-6 col-span-3">
+                  <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-3">
                     <label
                       htmlFor="large-input"
                       className="block mb-2 text-sm font-medium text-text-primary"
@@ -266,7 +310,7 @@ export default function CreateBotInformations() {
                       className="text-text-danger text-sm p-1"
                     />
                   </div>
-                  <div className="mb-6 col-span-3">
+                  <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-3">
                     <label
                       htmlFor="large-input"
                       className="block mb-2 text-sm font-medium text-text-primary"
@@ -290,11 +334,23 @@ export default function CreateBotInformations() {
                     />
                   </div>
                 </div>
-                <h2 className="text-lg font-bold mb-4 text-gray-500">
-                  Stop Loss
-                </h2>
+                <div className="mb-4 flex justify-between">
+                  <h2 className="text-lg font-bold text-gray-500">Stop Loss</h2>
+                  <div className="mr-4 md:hidden items-center flex">
+                    <div
+                      onClick={() =>
+                        modifyStateStoploss(setFieldValue, values, "stoploss")
+                      }
+                      className={`cursor-pointer h-2 w-10 border border-gray-400 flex items-center rounded-full ${values.stoploss ? "justify-end border-border-primary" : "justify-start"}`}
+                    >
+                      <div
+                        className={`h-5 w-5 rounded-full ${values.stoploss ? "bg-background-success" : "bg-gray-500"}`}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
                 <div className="flex">
-                  <div className="col-span-2 mr-4 flex items-center">
+                  <div className="mr-4 md:flex items-center hidden">
                     <div
                       onClick={() =>
                         modifyStateStoploss(setFieldValue, values, "stoploss")
@@ -307,7 +363,7 @@ export default function CreateBotInformations() {
                     </div>
                   </div>
                   <div className="w-full mb-6 grid gap-6 md:grid-cols-12">
-                    <div className="col-span-3">
+                    <div className="col-span-12 md:col-span-6 lg:col-span-3">
                       <label
                         htmlFor="large-input"
                         className={`block mb-2 text-sm font-medium ${values.stoploss ? "text-text-primary" : "text-text-secondary"}`}
@@ -335,7 +391,7 @@ export default function CreateBotInformations() {
                         className="text-text-danger text-sm p-1"
                       />
                     </div>
-                    <div className="col-span-3">
+                    <div className="col-span-12 md:col-span-6 lg:col-span-3">
                       <label
                         htmlFor="large-input"
                         className={`block mb-2 text-sm font-medium ${values.stoploss ? "text-text-primary" : "text-text-secondary"}`}
@@ -352,6 +408,7 @@ export default function CreateBotInformations() {
                         }
                         onBlur={handleBlur}
                         id="large-input"
+                        inputMode="numeric"
                         disabled={!values.stoploss}
                         className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                       />
@@ -363,11 +420,23 @@ export default function CreateBotInformations() {
                     </div>
                   </div>
                 </div>
-                <h2 className="text-lg font-bold mb-4 text-gray-500">
-                  Stop Gain
-                </h2>
+                <div className="mb-4 flex justify-between">
+                  <h2 className="text-lg font-bold text-gray-500">Stop Gain</h2>
+                  <div className="mr-4 md:hidden items-center flex">
+                    <div
+                      onClick={() =>
+                        modifyStateStoploss(setFieldValue, values, "stopgain")
+                      }
+                      className={`cursor-pointer h-2 w-10 border border-gray-400 flex items-center rounded-full ${values.stopgain ? "justify-end border-border-primary" : "justify-start"}`}
+                    >
+                      <div
+                        className={`h-5 w-5 rounded-full ${values.stopgain ? "bg-background-success" : "bg-gray-500"}`}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
                 <div className="flex">
-                  <div className="col-span-2 mr-4 flex items-center">
+                  <div className="mr-4 md:flex items-center hidden">
                     <div
                       onClick={() =>
                         modifyStateStoploss(setFieldValue, values, "stopgain")
@@ -380,7 +449,7 @@ export default function CreateBotInformations() {
                     </div>
                   </div>
                   <div className="w-full mb-6 grid gap-6 md:grid-cols-12">
-                    <div className="col-span-3">
+                    <div className="col-span-12 md:col-span-6 lg:col-span-3">
                       <label
                         htmlFor="large-input"
                         className={`block mb-2 text-sm font-medium ${values.stopgain ? "text-text-primary" : "text-text-secondary"}`}
@@ -408,7 +477,7 @@ export default function CreateBotInformations() {
                         className="text-text-danger text-sm p-1"
                       />
                     </div>
-                    <div className="col-span-3">
+                    <div className="col-span-12 md:col-span-6 lg:col-span-3">
                       <p
                         className={`block mb-2 text-sm font-medium ${values.stopgain ? "text-text-primary" : "text-text-secondary"}`}
                       >
@@ -424,6 +493,7 @@ export default function CreateBotInformations() {
                         }
                         onBlur={handleBlur}
                         id="large-input"
+                        inputMode="numeric"
                         disabled={!values.stopgain}
                         className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                       />
