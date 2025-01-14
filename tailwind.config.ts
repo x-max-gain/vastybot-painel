@@ -33,6 +33,7 @@ const config: Config = {
           alternatve: "#000",
           ligth: "#fff",
           main: "#4182e0",
+          danger: "#F00",
         },
         icons: {
           primary: "#929292",
@@ -42,6 +43,8 @@ const config: Config = {
         border: {
           primary: "#75FFC1",
           secondary: "#393939",
+          danger: "#F00",
+          success: "#08DD7E",
         },
         button: {
           primary: "#08DD7E",
