@@ -1,3 +1,10 @@
+export type createBotInformationsStopType =
+  | {
+      type: "percentage" | "value";
+      value: number;
+    }
+  | false;
+
 export type createBotInformationsType = {
   name: string;
   mode: "demo" | "real";
@@ -5,16 +12,6 @@ export type createBotInformationsType = {
   typeActive: string;
   active: string;
   companyActive: string;
-  stoploss:
-    | {
-        type: "percentage" | "value";
-        value: number;
-      }
-    | false;
-  stopgain:
-    | {
-        type: "percentage" | "value";
-        value: number;
-      }
-    | false;
+  stoploss: createBotInformationsStopType;
+  stopgain: createBotInformationsStopType;
 };

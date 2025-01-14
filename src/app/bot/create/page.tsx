@@ -1,6 +1,9 @@
 "use client";
 
-import { createBotInformationsType } from "@/services/types/bot";
+import {
+  createBotInformationsStopType,
+  createBotInformationsType,
+} from "@/services/types/bot";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
@@ -36,8 +39,32 @@ export default function CreateBotInformations() {
       )
       .required("Nome é obrigatório")
       .min(3, "Nome deve ter pelo três caracteres"),
-    mode: Yup.string(),
+    mode: Yup.string().oneOf(
+      ["demo", "real"],
+      "Modo deve ser do tipo simulado ou real",
+    ),
     close24hours: Yup.boolean().required("Fechar em 24 é obrigatório"),
+    typeActive: Yup.string().required("Tipo do ativo é obrigatório"),
+    active: Yup.string().required("Ativo é obrigatório"),
+    companyActive: Yup.string().required("Correto do ativo é obrigatório"),
+    stoploss: Yup.lazy((value: createBotInformationsStopType) => {
+      if (value === false) {
+        return Yup.boolean().oneOf([false]); // Valida que o valor é exatamente `false`
+      }
+      return Yup.object().shape({
+        type: Yup.string().required("Campo tipo é obrigatório"),
+        value: Yup.number().required("Campo valor é obrigatório"),
+      });
+    }),
+    stopgain: Yup.lazy((value: createBotInformationsStopType) => {
+      if (value === false) {
+        return Yup.boolean().oneOf([false]); // Valida que o valor é exatamente `false`
+      }
+      return Yup.object().shape({
+        type: Yup.string().required("Campo tipo é obrigatório"),
+        value: Yup.number().required("Campo valor é obrigatório"),
+      });
+    }),
   });
 
   const handleSubmitInformations = (values: createBotInformationsType) => {
@@ -141,6 +168,11 @@ export default function CreateBotInformations() {
                         </div>
                       </div>
                     </div>
+                    <ErrorMessage
+                      name="mode"
+                      component="div"
+                      className="text-text-danger text-sm p-1"
+                    />
                   </div>
                   <div className="col-span-3">
                     <p className="block mb-2 text-sm font-medium text-text-primary">
@@ -185,6 +217,11 @@ export default function CreateBotInformations() {
                     >
                       <option value="">Selecione um tipo de ativo</option>
                     </select>
+                    <ErrorMessage
+                      name="typeActive"
+                      component="div"
+                      className="text-text-danger text-sm p-1"
+                    />
                   </div>
                   <div className="mb-6 col-span-3">
                     <label
@@ -203,6 +240,11 @@ export default function CreateBotInformations() {
                     >
                       <option value="">Selecione o ativo</option>
                     </select>
+                    <ErrorMessage
+                      name="active"
+                      component="div"
+                      className="text-text-danger text-sm p-1"
+                    />
                   </div>
                   <div className="mb-6 col-span-3">
                     <label
@@ -221,6 +263,11 @@ export default function CreateBotInformations() {
                     >
                       <option value="">Selecione a corretora</option>
                     </select>
+                    <ErrorMessage
+                      name="companyActive"
+                      component="div"
+                      className="text-text-danger text-sm p-1"
+                    />
                   </div>
                 </div>
                 <h2 className="text-lg font-bold mb-4 text-gray-500">
@@ -243,7 +290,7 @@ export default function CreateBotInformations() {
                     <div className="col-span-3">
                       <label
                         htmlFor="large-input"
-                        className="block mb-2 text-sm font-medium text-text-primary"
+                        className={`block mb-2 text-sm font-medium ${values.stoploss ? "text-text-primary" : "text-text-secondary"}`}
                       >
                         Tipo do stop loss
                       </label>
@@ -256,14 +303,22 @@ export default function CreateBotInformations() {
                         disabled={!values.stoploss}
                         className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                       >
+                        <option value="" className="hidden">
+                          Selecione uma opção
+                        </option>
                         <option value="percentage">Porcentagem</option>
                         <option value="value">Valor</option>
                       </select>
+                      <ErrorMessage
+                        name="stoploss.type"
+                        component="div"
+                        className="text-text-danger text-sm p-1"
+                      />
                     </div>
                     <div className="col-span-3">
                       <label
                         htmlFor="large-input"
-                        className="block mb-2 text-sm font-medium text-text-primary"
+                        className={`block mb-2 text-sm font-medium ${values.stoploss ? "text-text-primary" : "text-text-secondary"}`}
                       >
                         Valor do stop loss
                       </label>
@@ -271,12 +326,17 @@ export default function CreateBotInformations() {
                         type="text"
                         value={values.stoploss ? values.stoploss.value : ""}
                         name="stoploss.value"
-                        placeholder="0%"
+                        placeholder={`0${values.stoploss && values.stoploss.type === "percentage" ? "%" : ""}`}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         id="large-input"
                         disabled={!values.stoploss}
                         className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
+                      />
+                      <ErrorMessage
+                        name="stoploss.value"
+                        component="div"
+                        className="text-text-danger text-sm p-1"
                       />
                     </div>
                   </div>
@@ -301,7 +361,7 @@ export default function CreateBotInformations() {
                     <div className="col-span-3">
                       <label
                         htmlFor="large-input"
-                        className="block mb-2 text-sm font-medium text-text-primary"
+                        className={`block mb-2 text-sm font-medium ${values.stopgain ? "text-text-primary" : "text-text-secondary"}`}
                       >
                         Tipo de stop gain
                       </label>
@@ -314,24 +374,39 @@ export default function CreateBotInformations() {
                         disabled={!values.stopgain}
                         className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                       >
+                        <option value="" className="hidden">
+                          Selecione uma opção
+                        </option>
                         <option value="percentage">Porcentagem</option>
                         <option value="value">Valor</option>
                       </select>
+                      <ErrorMessage
+                        name="stopgain.type"
+                        component="div"
+                        className="text-text-danger text-sm p-1"
+                      />
                     </div>
                     <div className="col-span-3">
-                      <p className="block mb-2 text-sm font-medium text-text-primary">
+                      <p
+                        className={`block mb-2 text-sm font-medium ${values.stopgain ? "text-text-primary" : "text-text-secondary"}`}
+                      >
                         Valor do stop gain
                       </p>
                       <input
                         type="text"
                         value={values.stopgain ? values.stopgain.value : ""}
                         name="stopgain.value"
-                        placeholder="0%"
+                        placeholder={`0${values.stopgain && values.stopgain.type === "percentage" ? "%" : ""}`}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         id="large-input"
                         disabled={!values.stopgain}
                         className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
+                      />
+                      <ErrorMessage
+                        name="stopgain.value"
+                        component="div"
+                        className="text-text-danger text-sm p-1"
                       />
                     </div>
                   </div>
