@@ -7,10 +7,10 @@ export type createBotInformationsStopType =
 
 export type createBotInformationsType = {
   name: string;
-  mode: "demo" | "real";
+  mode: "DEMO" | "REAL";
   close24hours: boolean;
   operationSimultaneous: number;
-  typeActive: string;
+  activeType: string;
   active: string;
   activeBroker: string;
   stoploss: createBotInformationsStopType;

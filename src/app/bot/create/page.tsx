@@ -64,10 +64,10 @@ export default function CreateBotInformations() {
   const [initialValues, setInitialValues] = useState<createBotInformationsType>(
     {
       name: "",
-      mode: "demo",
+      mode: "DEMO",
       close24hours: false,
       operationSimultaneous: 1,
-      typeActive: "",
+      activeType: "",
       active: "",
       activeBroker: "",
       stoploss: false,
@@ -83,13 +83,13 @@ export default function CreateBotInformations() {
         (value: string | undefined) => !!value?.trim().length,
       )
       .matches(
-        /^[a-zA-ZáÁàÀâÂãÃéÉèÈêÊíÍìÌîÎóÓòÒôÔõÕúÚùÙûÛçÇ#_\-.]+$/,
+        /^[a-zA-ZáÁàÀâÂãÃéÉèÈêÊíÍìÌîÎóÓòÒôÔõÕúÚùÙûÛçÇ# _\-.1234567890³]+$/,
         "Apenas esses caracteres especiais são permitidos: # - _ .",
       )
       .required("Nome é obrigatório")
       .min(3, "Nome deve ter pelo três caracteres"),
     mode: Yup.string().oneOf(
-      ["demo", "real"],
+      ["DEMO", "REAL"],
       "Modo deve ser do tipo simulado ou real",
     ),
     close24hours: Yup.boolean().required("Fechar em 24 é obrigatório"),
@@ -97,7 +97,7 @@ export default function CreateBotInformations() {
       .required("Quantidade de máxima de operações simultâneas é obrigatório")
       .positive("Esse campo deve ser um número positivo")
       .min(1, "O número deve ser maior do 0"),
-    typeActive: Yup.string().required("Tipo do ativo é obrigatório"),
+    activeType: Yup.string().required("Tipo do ativo é obrigatório"),
     active: Yup.string().required("Ativo é obrigatório"),
     activeBroker: Yup.string().required("Correto do ativo é obrigatório"),
     stoploss: Yup.lazy((value: createBotInformationsStopType) => {
@@ -123,11 +123,11 @@ export default function CreateBotInformations() {
   const handleSubmit = async (values: createBotInformationsType) => {
     try {
       const { data } = await createBotInformations(values);
-      console.log(data);
+      router.push(`/bot/${data._id}`);
     } catch (error) {
       console.log("Error: ", error);
     }
-    // router.push("/bot/view/123/algorithm");
+    //
   };
 
   useEffect(() => {
@@ -248,14 +248,14 @@ export default function CreateBotInformations() {
                     <div className="grid grid-cols-12">
                       <div className="col-span-12 grid grid-cols-12">
                         <div
-                          onClick={() => setFieldValue("mode", "demo")}
-                          className={`tracking-widest col-span-6 w-full flex justify-center py-2 rounded-l-lg font-bold ${values.mode === "demo" ? "cursor-default bg-background-main text-text-ligth" : "cursor-pointer border border-gray-300 text-text-primary"}`}
+                          onClick={() => setFieldValue("mode", "DEMO")}
+                          className={`tracking-widest col-span-6 w-full flex justify-center py-2 rounded-l-lg font-bold ${values.mode === "DEMO" ? "cursor-default bg-background-main text-text-ligth" : "cursor-pointer border border-gray-300 text-text-primary"}`}
                         >
                           SIMULADO
                         </div>
                         <div
-                          onClick={() => setFieldValue("mode", "real")}
-                          className={`tracking-widest col-span-6 w-full flex justify-center py-2 rounded-r-lg font-bold  ${values.mode === "real" ? "cursor-default bg-background-main text-text-ligth" : "cursor-pointer border border-gray-300 text-text-primary"}`}
+                          onClick={() => setFieldValue("mode", "REAL")}
+                          className={`tracking-widest col-span-6 w-full flex justify-center py-2 rounded-r-lg font-bold  ${values.mode === "REAL" ? "cursor-default bg-background-main text-text-ligth" : "cursor-pointer border border-gray-300 text-text-primary"}`}
                         >
                           REAL
                         </div>
@@ -324,8 +324,8 @@ export default function CreateBotInformations() {
                       Tipo de ativo
                     </label>
                     <select
-                      value={values.typeActive}
-                      name="typeActive"
+                      value={values.activeType}
+                      name="activeType"
                       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                         setFieldValue(e.target.name, e.target.value);
                         setFieldValue("active", "");
@@ -345,7 +345,7 @@ export default function CreateBotInformations() {
                       ))}
                     </select>
                     <ErrorMessage
-                      name="typeActive"
+                      name="activeType"
                       component="div"
                       className="text-text-danger text-sm p-1"
                     />
@@ -366,13 +366,13 @@ export default function CreateBotInformations() {
                       }}
                       onBlur={handleBlur}
                       id="large-input"
-                      disabled={values.typeActive ? false : true}
+                      disabled={values.activeType ? false : true}
                       className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                     >
                       <option value="">Selecione o ativo</option>
-                      {values.typeActive &&
+                      {values.activeType &&
                         actives
-                          .filter((type) => type._id === values.typeActive)[0]
+                          .filter((type) => type._id === values.activeType)[0]
                           .actives.map((active, index) => (
                             <option key={index} value={active._id}>
                               {active.name}
@@ -399,15 +399,15 @@ export default function CreateBotInformations() {
                       onBlur={handleBlur}
                       id="large-input"
                       disabled={
-                        values.typeActive && values.active ? false : true
+                        values.activeType && values.active ? false : true
                       }
                       className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                     >
                       <option value="">Selecione a corretora</option>
-                      {values.typeActive &&
+                      {values.activeType &&
                         values.active &&
                         actives
-                          .filter((type) => type._id === values.typeActive)[0]
+                          .filter((type) => type._id === values.activeType)[0]
                           .actives.filter(
                             (active) => active._id === values.active,
                           )[0]
