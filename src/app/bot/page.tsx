@@ -79,16 +79,16 @@ export default function Bot() {
                 key={index}
                 className="bg-background-secondary border border-gray-200 shadow rounded-lg"
               >
-                <Link href="/bot/22">
+                <Link href={`/bot/${item._id}`}>
                   <div className="p-4 bg-background-primary rounded-lg">
                     <div className="flex justify-between items-center">
-                      <h2 className="text-green-500 font-bold">#3945605</h2>
-                      <p className="text-gray-500">Pessimista</p>
+                      <h2 className="text-lg font-semibold text-gray-600">
+                        {item.name}
+                      </h2>
+                      <p className="text-green-500 font-bold">{item.active}</p>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-600">
-                      {item.name}
-                    </h3>
-                    <p className="text-gray-400">Fibonacci</p>
+
+                    <p className="text-gray-400">{item.activeType}</p>
 
                     <div className="h-32 bg-gray-200 mt-4 rounded flex items-center justify-center">
                       <p className="text-gray-500">[Gráfico Aqui]</p>
@@ -117,18 +117,22 @@ export default function Bot() {
                   </div>
                 </Link>
 
-                <div className="mt-4 w-full bg-gray-200	 p-2 flex items-center justify-between">
-                  <button className="text-gray-500 font-bold flex items-center underline">
+                <div className="w-full bg-gray-100 p-2 flex items-center justify-between">
+                  <div className="text-gray-500 font-bold flex items-center underline">
                     VER MAIS
-                  </button>
-                  <button className="flex items-center">
+                  </div>
+                  <div className="flex items-center">
                     <span className="text-green-500 mr-2 font-bold">
                       Executando
                     </span>
                     <span className="p-1 border border-green-500 hover:bg-green-500">
-                      <Pause width={20} height={20} />
+                      <Pause
+                        width={20}
+                        height={20}
+                        className="text-text-primary"
+                      />
                     </span>
-                  </button>
+                  </div>
                 </div>
               </div>
             ))}
