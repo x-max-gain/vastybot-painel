@@ -10,10 +10,57 @@ import * as Yup from "yup";
 import { ChevronLeft, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { createBotInformations } from "@/services/modules/bot.module";
 
 export default function CreateBotInformations() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [actives, setActives] = useState([
+    {
+      _id: "cryptocoin",
+      name: "Cripto Moeda",
+      actives: [
+        {
+          _id: "BTC",
+          name: "Bitcoin",
+          brockers: [
+            { _id: "binance", name: "Binance" },
+            { _id: "mb", name: "Mercado Bitcoin" },
+          ],
+        },
+        {
+          _id: "ETR",
+          name: "ETHEREUM",
+          brockers: [
+            { _id: "binance", name: "Binance" },
+            { _id: "mb", name: "Mercado Bitcoin" },
+          ],
+        },
+      ],
+    },
+    {
+      _id: "flls",
+      name: "Fundos Imobiliários",
+      actives: [
+        {
+          _id: "ARC5",
+          name: "ARC5",
+          brockers: [
+            { _id: "b3", name: "B3" },
+            { _id: "rico", name: "Corretora RICO" },
+          ],
+        },
+        {
+          _id: "ARC10",
+          name: "ARC10",
+          brockers: [
+            { _id: "b3", name: "B3" },
+            { _id: "rico", name: "Corretora RICO" },
+          ],
+        },
+      ],
+    },
+  ]);
   const [initialValues, setInitialValues] = useState<createBotInformationsType>(
     {
       name: "",
@@ -22,7 +69,7 @@ export default function CreateBotInformations() {
       operationSimultaneous: 1,
       typeActive: "",
       active: "",
-      companyActive: "",
+      activeBroker: "",
       stoploss: false,
       stopgain: false,
     },
@@ -52,7 +99,7 @@ export default function CreateBotInformations() {
       .min(1, "O número deve ser maior do 0"),
     typeActive: Yup.string().required("Tipo do ativo é obrigatório"),
     active: Yup.string().required("Ativo é obrigatório"),
-    companyActive: Yup.string().required("Correto do ativo é obrigatório"),
+    activeBroker: Yup.string().required("Correto do ativo é obrigatório"),
     stoploss: Yup.lazy((value: createBotInformationsStopType) => {
       if (value === false) {
         return Yup.boolean().oneOf([false]); // Valida que o valor é exatamente `false`
@@ -73,8 +120,13 @@ export default function CreateBotInformations() {
     }),
   });
 
-  const handleSubmit = (values: createBotInformationsType) => {
-    console.log("Form Data:", values);
+  const handleSubmit = async (values: createBotInformationsType) => {
+    try {
+      const { data } = await createBotInformations(values);
+      console.log(data);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
     // router.push("/bot/view/123/algorithm");
   };
 
@@ -274,12 +326,23 @@ export default function CreateBotInformations() {
                     <select
                       value={values.typeActive}
                       name="typeActive"
-                      onChange={handleChange}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                        setFieldValue(e.target.name, e.target.value);
+                        setFieldValue("active", "");
+                        setFieldValue("activeBroker", "");
+                      }}
                       onBlur={handleBlur}
                       id="large-input"
                       className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                     >
-                      <option value="">Selecione um tipo de ativo</option>
+                      <option className="hidden" value="">
+                        Selecione um tipo de ativo
+                      </option>
+                      {actives.map((item, index) => (
+                        <option key={index} value={item._id}>
+                          {item.name}
+                        </option>
+                      ))}
                     </select>
                     <ErrorMessage
                       name="typeActive"
@@ -297,12 +360,24 @@ export default function CreateBotInformations() {
                     <select
                       value={values.active}
                       name="active"
-                      onChange={handleChange}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                        setFieldValue(e.target.name, e.target.value);
+                        setFieldValue("activeBroker", "");
+                      }}
                       onBlur={handleBlur}
                       id="large-input"
+                      disabled={values.typeActive ? false : true}
                       className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                     >
                       <option value="">Selecione o ativo</option>
+                      {values.typeActive &&
+                        actives
+                          .filter((type) => type._id === values.typeActive)[0]
+                          .actives.map((active, index) => (
+                            <option key={index} value={active._id}>
+                              {active.name}
+                            </option>
+                          ))}
                     </select>
                     <ErrorMessage
                       name="active"
@@ -318,17 +393,32 @@ export default function CreateBotInformations() {
                       Corretora
                     </label>
                     <select
-                      value={values.companyActive}
-                      name="companyActive"
+                      value={values.activeBroker}
+                      name="activeBroker"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       id="large-input"
+                      disabled={
+                        values.typeActive && values.active ? false : true
+                      }
                       className="focus:outline-gray-300 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:border-gray-300"
                     >
                       <option value="">Selecione a corretora</option>
+                      {values.typeActive &&
+                        values.active &&
+                        actives
+                          .filter((type) => type._id === values.typeActive)[0]
+                          .actives.filter(
+                            (active) => active._id === values.active,
+                          )[0]
+                          .brockers.map((brocker, index) => (
+                            <option key={index} value={brocker._id}>
+                              {brocker.name}
+                            </option>
+                          ))}
                     </select>
                     <ErrorMessage
-                      name="companyActive"
+                      name="activeBroker"
                       component="div"
                       className="text-text-danger text-sm p-1"
                     />

@@ -5,7 +5,7 @@ import { createBotInformationsType } from "../types/bot";
 export const createBotInformations = async (
   data: createBotInformationsType,
 ) => {
-  const res = await API.post("/bot", data);
+  return await API.post("/bot", data);
 };
 
 export const getMyBots = async (): Promise<Pagination<Array<any>>> => {

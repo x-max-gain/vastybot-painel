@@ -12,7 +12,7 @@ export type createBotInformationsType = {
   operationSimultaneous: number;
   typeActive: string;
   active: string;
-  companyActive: string;
+  activeBroker: string;
   stoploss: createBotInformationsStopType;
   stopgain: createBotInformationsStopType;
 };
