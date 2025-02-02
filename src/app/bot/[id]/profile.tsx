@@ -12,13 +12,16 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function ProfileLayout({
   params,
 }: Readonly<{
   params: { id: string };
 }>) {
+  const pathname = usePathname();
   const dataBot = useMyContextDataBot();
+  const lastPart = pathname.split("/").filter(Boolean).pop();
   return (
     <>
       {dataBot && (
@@ -47,28 +50,28 @@ export default function ProfileLayout({
           <div className="flex">
             <Link
               href={`/bot/${params.id}/statistics`}
-              className="rounded-md py-2 px-4 flex items-center bg-background-main mr-4 text-text-ligth"
+              className={`${lastPart === "statistics" ? "bg-background-main text-text-ligth" : "bg-background-primary text-text-primary"} mr-4 rounded-md py-2 px-4 flex items-center`}
             >
               <BarChart className="mr-2" />
               <p>Estátisticas</p>
             </Link>
             <Link
               href={`/bot/${params.id}/algorithm`}
-              className="rounded-md py-2 px-4 flex items-center bg-background-primary mr-4"
+              className={`${lastPart === "algorithm" ? "bg-background-main text-text-ligth" : "bg-background-primary text-text-primary"} mr-4 rounded-md py-2 px-4 flex items-center`}
             >
               <SlidersHorizontal className="mr-2" />
               <p>Lógica</p>
             </Link>
             <Link
               href={`/bot/${params.id}/simulations`}
-              className="rounded-md py-2 px-4 flex items-center bg-background-primary mr-4"
+              className={`${lastPart === "simulations" ? "bg-background-main text-text-ligth" : "bg-background-primary text-text-primary"} mr-4 rounded-md py-2 px-4 flex items-center`}
             >
               <FlaskConical className="mr-2" />
               <p>Simulações</p>
             </Link>
             <Link
               href={`/bot/${params.id}/configs`}
-              className="rounded-md py-2 px-4 flex items-center bg-background-primary"
+              className={`${lastPart === "configs" ? "bg-background-main text-text-ligth" : "bg-background-primary text-text-primary"} rounded-md py-2 px-4 flex items-center`}
             >
               <Bolt className="mr-2" />
               <p>Configurações</p>
