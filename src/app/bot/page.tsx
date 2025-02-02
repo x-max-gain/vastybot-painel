@@ -79,7 +79,7 @@ export default function Bot() {
                 key={index}
                 className="bg-background-secondary border border-gray-200 shadow rounded-lg"
               >
-                <Link href={`/bot/${item._id}`}>
+                <Link href={`/bot/${item._id}/statistics`}>
                   <div className="p-4 bg-background-primary rounded-lg">
                     <div className="flex justify-between items-center">
                       <h2 className="text-lg font-semibold text-gray-600">
@@ -150,7 +150,7 @@ export default function Bot() {
                 key={index}
                 className="bg-background-secondary border border-gray-200 shadow rounded-lg"
               >
-                <Link href="/bot/22">
+                <Link href={`/bot/${item._id}/statistics`}>
                   <div className="p-4 bg-background-primary rounded-lg">
                     <div className="flex justify-between items-center">
                       <h2 className="text-green-500 font-bold">#3945605</h2>
