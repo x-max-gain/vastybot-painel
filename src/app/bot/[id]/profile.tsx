@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function ProfileLayout({
   params,
@@ -20,6 +21,7 @@ export default function ProfileLayout({
   params: { id: string };
 }>) {
   const pathname = usePathname();
+  const router = useRouter();
   const dataBot = useMyContextDataBot();
   const lastPart = pathname.split("/").filter(Boolean).pop();
   return (
@@ -28,7 +30,10 @@ export default function ProfileLayout({
         <>
           <div className="flex justify-between mb-4 bg-background-primary p-4">
             <div className="flex items-center">
-              <div className="mr-2 hover:bg-background-secondary p-2">
+              <div
+                className="mr-2 hover:bg-background-secondary p-2 cursor-pointer"
+                onClick={router.back}
+              >
                 <ChevronLeft />
               </div>
               <h1 className="text-2xl font-bold mr-2">{dataBot.name}</h1>
