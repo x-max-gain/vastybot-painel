@@ -44,15 +44,15 @@ export default function SignUp() {
 
   return (
     <div className="flex flex-col max-[400px]:px-4 items-center justify-center min-h-screen">
-      <div className="w-full max-w-md p-6 border border-border-primary rounded-lg shadow-lg">
-        <h2 className="mb-6 text-2xl font-semibold text-center text-white">
+      <div className="bg-background-primary w-full max-w-md p-6 border border-border-primary rounded-lg shadow-lg">
+        <h2 className="mb-6 text-2xl font-semibold text-center text-text-primary">
           Criar uma conta
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-white"
+              className="block text-sm font-medium text-text-primary"
             >
               Nome
             </label>
@@ -69,7 +69,7 @@ export default function SignUp() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-white"
+              className="block text-sm font-medium text-text-primary"
             >
               E-mail
             </label>
@@ -86,7 +86,7 @@ export default function SignUp() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-white"
+              className="block text-sm font-medium text-text-primary"
             >
               Senha
             </label>
@@ -103,7 +103,7 @@ export default function SignUp() {
           <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-white"
+              className="block text-sm font-medium text-text-primary"
             >
               Confirme sua senha
             </label>
@@ -122,7 +122,7 @@ export default function SignUp() {
 
           <button
             type="submit"
-            className="w-full py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600"
+            className="w-full py-2 text-sm font-medium text-text-ligth bg-green-500 rounded-md hover:bg-green-600"
           >
             Criar conta
           </button>

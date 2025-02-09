@@ -3,11 +3,11 @@
 import { useState } from "react";
 
 // MODULES
-import Plans from "../../plans/page";
+import Plans from "../plans/page";
 import AccountProfile from "./modules/profile";
-import Integrations from "../../integrations/page";
+import Integrations from "../integrations/page";
 import AccessProfile from "./modules/access";
-import Finnance from "../../finance/page";
+import Finnance from "../finance/page";
 
 export default function Account() {
   const [activeTab, setActiveTab] = useState("Perfil");

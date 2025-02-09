@@ -3,8 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import GoogleLogo from "../../../public/social/goolge-logo.png";
+import { Login } from "@/services/modules/auth.module";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,26 +21,33 @@ export default function SignIn() {
     setError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    setLoading(true);
     e.preventDefault();
-    if (!formData.email || !formData.password) {
-      setError("Todos os campos são obrigatórios.");
-      return;
+    try {
+      if (!formData.email || !formData.password) {
+        setError("Todos os campos são obrigatórios.");
+        return;
+      }
+      const responseLogin = await Login(formData);
+      setLoading(false);
+      // if (responseLogin) router.push("/");
+    } catch (err) {
+      setLoading(false);
     }
-    console.log("Dados enviados:", formData);
   };
 
   return (
     <div className="flex flex-col max-[400px]:px-4 items-center justify-center min-h-screen">
-      <div className="w-full  max-w-md p-6 border border-border-primary rounded-lg shadow-lg">
-        <h2 className="mb-6 text-2xl font-semibold text-center text-white">
+      <div className="bg-background-primary w-full  max-w-md p-6 border border-border-primary rounded-lg shadow-lg">
+        <h2 className="mb-6 text-2xl font-semibold text-center text-text-primary">
           Entrar na sua conta
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-white"
+              className="block text-sm font-medium text-text-primary"
             >
               E-mail
             </label>
@@ -53,7 +64,7 @@ export default function SignIn() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-white"
+              className="block text-sm font-medium text-text-primary"
             >
               Senha
             </label>
@@ -72,15 +83,15 @@ export default function SignIn() {
 
           <button
             type="submit"
-            className="w-full py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600"
+            className={`w-full py-2 text-sm font-medium text-white ${loading ? "bg-gray-500 rounded-md hover:bg-gray-600" : "bg-green-500 rounded-md hover:bg-green-600"}`}
           >
-            Entrar
+            {loading ? "Carregando..." : "Entrar"}
           </button>
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
             Não tem uma conta?{" "}
-            <a href="/signup" className="text-green-500 hover:underline">
+            <a href="/sign-up" className="text-green-500 hover:underline">
               Cadastre-se
             </a>
           </p>
