@@ -1,39 +1,45 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
 import Image from "next/image";
-import GoogleLogo from "../../../public/social/goolge-logo.png";
-import { Login } from "@/services/modules/auth.module";
 import { useRouter } from "next/navigation";
+import { ErrorMessage, Form, Formik } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+
+// service
+import { Login } from "@/services/modules/auth.module";
+import { AuthBodyType } from "@/services/types/auth";
+
+// Images
+import GoogleLogo from "../../../public/social/goolge-logo.png";
 
 export default function SignIn() {
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const initialValues = {
     email: "",
     password: "",
-  });
-
-  const [error, setError] = useState("");
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError("");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    setLoading(true);
-    e.preventDefault();
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .test(
+        "no-only-spaces",
+        "O campo não pode conter apenas espaços em branco",
+        (value: string | undefined) => !!value?.trim().length,
+      )
+      .required("E-mail é obrigatório")
+      .email("E-mail inválido"),
+    password: Yup.string().required("Senha é obrigatório"),
+  });
+
+  const handleSubmit = async (values: AuthBodyType) => {
     try {
-      if (!formData.email || !formData.password) {
-        setError("Todos os campos são obrigatórios.");
-        return;
-      }
-      const responseLogin = await Login(formData);
-      setLoading(false);
+      const responseLogin = await Login(values);
+      console.log(responseLogin);
       // if (responseLogin) router.push("/");
-    } catch (err) {
-      setLoading(false);
+    } catch (err: any) {
+      const message = err.response.data.message;
+      toast.error(message);
     }
   };
 
@@ -43,51 +49,77 @@ export default function SignIn() {
         <h2 className="mb-6 text-2xl font-semibold text-center text-text-primary">
           Entrar na sua conta
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-text-primary"
-            >
-              E-mail
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
-              placeholder="Digite seu e-mail"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-text-primary"
-            >
-              Senha
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
-              placeholder="Digite sua senha"
-            />
-          </div>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({
+            isSubmitting,
+            handleChange,
+            handleBlur,
+            values,
+            handleSubmit,
+            errors,
+            touched,
+          }) => (
+            <Form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-text-primary"
+                >
+                  E-mail
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`${touched.email && errors.email ? "border-border-danger" : "border-gray-300"} border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none`}
+                  placeholder="Digite seu e-mail"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-text-danger text-sm p-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-text-primary"
+                >
+                  Senha
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  className={`${touched.password && errors.password ? "border-border-danger" : "border-gray-300"} border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none`}
+                  placeholder="Digite sua senha"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-text-danger text-sm p-1"
+                />
+              </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
-
-          <button
-            type="submit"
-            className={`w-full py-2 text-sm font-medium text-white ${loading ? "bg-gray-500 rounded-md hover:bg-gray-600" : "bg-green-500 rounded-md hover:bg-green-600"}`}
-          >
-            {loading ? "Carregando..." : "Entrar"}
-          </button>
-        </form>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`w-full py-2 text-sm font-medium text-white ${isSubmitting ? "bg-gray-500 rounded-md hover:bg-gray-600" : "bg-green-500 rounded-md hover:bg-green-600"}`}
+              >
+                {isSubmitting ? "Carregando..." : "Entrar"}
+              </button>
+            </Form>
+          )}
+        </Formik>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
             Não tem uma conta?{" "}
