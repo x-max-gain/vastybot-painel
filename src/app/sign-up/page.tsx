@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import GoogleLogo from "../../../public/social/goolge-logo.png";
+import DDDs from "@/services/phone/ptbr";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -10,11 +11,20 @@ export default function SignUp() {
     email: "",
     password: "",
     confirmPassword: "",
+    phone: {
+      number: "",
+      areaCode: "",
+      countryCode: "55",
+    },
   });
 
   const [error, setError] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError("");
+  };
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError("");
   };
@@ -62,7 +72,7 @@ export default function SignUp() {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
+              className="border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
               placeholder="Digite seu nome"
             />
           </div>
@@ -79,9 +89,49 @@ export default function SignUp() {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
+              className="border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
               placeholder="Digite seu e-mail"
             />
+          </div>
+          <div className="flex">
+            <div className="mr-2 w-24">
+              <label
+                htmlFor="phone.areaCode"
+                className="block text-sm font-medium text-text-primary"
+              >
+                DDD
+              </label>
+              <select
+                id="phone.areaCode"
+                name="phone.areaCode"
+                value={formData.phone.areaCode}
+                onChange={handleSelectChange}
+                className="border-gray-400 w-full text-gray-700 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
+              >
+                {DDDs.map((ddd, index) => (
+                  <option key={index} value={ddd.code}>
+                    {ddd.code}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="w-full">
+              <label
+                htmlFor="phone.number"
+                className="block text-sm font-medium text-text-primary"
+              >
+                Telefone
+              </label>
+              <input
+                type="text"
+                id="phone.number"
+                name="phone.number"
+                value={formData.phone.number}
+                onChange={handleInputChange}
+                className="border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
+                placeholder="Digite seu e-mail"
+              />
+            </div>
           </div>
           <div>
             <label
@@ -96,7 +146,7 @@ export default function SignUp() {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
-              className="w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
+              className="border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
               placeholder="Digite sua senha"
             />
           </div>
@@ -113,7 +163,7 @@ export default function SignUp() {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleInputChange}
-              className="w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
+              className="border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
               placeholder="Confirme sua senha"
             />
           </div>
