@@ -12,8 +12,11 @@ import { AuthBodyType } from "@/services/types/auth";
 
 // Images
 import GoogleLogo from "../../../public/social/goolge-logo.png";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 export default function SignIn() {
+  const [viewPassword, setViewPassword] = useState(false);
   const router = useRouter();
   const initialValues = {
     email: "",
@@ -94,15 +97,28 @@ export default function SignIn() {
                 >
                   Senha
                 </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={values.password}
-                  onChange={handleChange}
-                  className={`${touched.password && errors.password ? "border-border-danger" : "border-gray-300"} border-gray-400 w-full text-gray-600 px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none`}
-                  placeholder="Digite sua senha"
-                />
+                <div className="border-gray-400 w-full flex items-center bg-[#E8F0FE] mt-1 rounded-md cursor-pointer">
+                  <input
+                    type={viewPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    className="w-full text-gray-600 px-4 py-2 text-sm rounded-md border focus:ring-2 focus:ring-green-400 focus:outline-none"
+                    placeholder="Digite sua senha"
+                  />
+                  {viewPassword ? (
+                    <Eye
+                      className="text-text-primary2 mx-2"
+                      onClick={() => setViewPassword(!viewPassword)}
+                    />
+                  ) : (
+                    <EyeOff
+                      className="text-text-primary2 mx-2"
+                      onClick={() => setViewPassword(!viewPassword)}
+                    />
+                  )}
+                </div>
                 <ErrorMessage
                   name="password"
                   component="div"
