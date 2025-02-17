@@ -5,11 +5,13 @@ import GoogleLogo from "../../../public/social/goolge-logo.png";
 import DDDs from "@/services/phone/ptbr";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { createUserType } from "@/services/types/user";
+import { toast } from "react-toastify";
+import { createAccountValidationType } from "@/services/types/account";
 
 // ICONS
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { createAccount } from "@/services/modules/account.module";
 
 export default function SignUp() {
   const [viewPassword, setViewPassword] = useState(false);
@@ -26,8 +28,15 @@ export default function SignUp() {
     },
   };
 
-  const handleSubmit = (values: createUserType) => {
-    console.log("Dados enviados:", values);
+  const handleSubmit = async (values: createAccountValidationType) => {
+    try {
+      const responseLogin = await createAccount(values);
+      console.log(responseLogin);
+      // if (responseLogin) router.push("/");
+    } catch (err: any) {
+      const message = err.response.data.message;
+      toast.error(message);
+    }
   };
 
   const validationSchema = Yup.object({

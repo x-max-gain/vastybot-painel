@@ -1,10 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
-import Image from "next/image";
-import GoogleLogo from "../../../public/social/goolge-logo.png";
-import { Login } from "@/services/modules/auth.module";
-import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
